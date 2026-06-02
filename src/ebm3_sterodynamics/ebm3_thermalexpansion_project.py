@@ -59,6 +59,7 @@ def ebm3_thermalexpansion_project(
 
     #temperature output from fair2. Needed t compute OHC
     climate_ds = xr.open_dataset(climate_data_file, group=scenario)
+    print('climate ds coords: ', climate_ds.coords)
     gsat = climate_ds['surface_temperature'].data
     deepoceant = climate_ds['deep_ocean_temperature'].data
     years = climate_ds['years'].data

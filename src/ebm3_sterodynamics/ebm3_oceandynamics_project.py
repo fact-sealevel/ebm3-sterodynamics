@@ -171,8 +171,8 @@ def emb3_thermalexpansion_postprocess(
           params, 
           zosdir,
           global_sl_out_file,
-          #init_local_out_file,
-          #init_local_quantile_file
+          init_local_out_file,
+          init_local_quantile_file
           ):
     
     if pyear_end < 2151:
@@ -582,7 +582,7 @@ def emb3_thermalexpansion_postprocess(
 
     for sample in samples:
         slope = slopes_resampled[sample]
-        print(sample)
+        #print(sample)
         
         # prepare slopes
         slope_s = slope[0,:,:].flatten()
@@ -646,14 +646,14 @@ def emb3_thermalexpansion_postprocess(
                             "lat": (("locations"), site_lats),
                             "lon": (("locations"), site_lons)},
                             coords={"years": projyears, "locations": site_ids, "samples": np.arange(nsamps)}, attrs=ncvar_attributes)
-        # Write these samples to a temporary netcdf file
+    # Write these samples to a temporary netcdf file
     #local_out.to_netcdf("{0}_localsl.nc".format(pipeline_id), encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
-    #local_out.to_netcdf(init_local_out_file,
-    #                    encoding = {"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
-    #local_outq = local_out.quantile([0.01,0.05,0.17,0.50,0.83,0.95,0.99], dim='samples')
-    #local_outq.to_netcdf(
-    #     init_local_quantile_file, 
-    #     encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
+    local_out.to_netcdf(init_local_out_file,
+                        encoding = {"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
+    local_outq = local_out.quantile([0.01,0.05,0.17,0.50,0.83,0.95,0.99], dim='samples')
+    local_outq.to_netcdf(
+         init_local_quantile_file, 
+         encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
     
 def ebm3_oceandynamics_project_fn(
           scenario,
@@ -670,26 +670,31 @@ def ebm3_oceandynamics_project_fn(
           params,
           zosdir,
           global_sl_out_file,
-          #init_local_out_file,
-          #init_local_quantile_file,
+          init_local_out_file,
+          init_local_quantile_file,
           ):
-    emb3_thermalexpansion_postprocess(scenario, 
-                                      pipeline_id, 
-                                      nsamps, 
-                                      seed, 
-                                      pyear_start, 
-                                      pyear_end, 
-                                      pyear_step, 
-                                      location_file, 
-                                      baseyear, 
-                                      climate_data_file,
-                                      rfmip,
-                                      params,
-                                      zosdir,
-                                      global_sl_out_file=global_sl_out_file,
-                                      #init_local_out_file=init_local_out_file,
-                                      #init_local_quantile_file=init_local_quantile_file
-                                      )
+    
+    if init_local_out_file is not None and init_local_quantile_file is not None:
+        print('Local output files provided, running fingerprinting.')
+        emb3_thermalexpansion_postprocess(scenario, 
+                                        pipeline_id, 
+                                        nsamps, 
+                                        seed, 
+                                        pyear_start, 
+                                        pyear_end, 
+                                        pyear_step, 
+                                        location_file, 
+                                        baseyear, 
+                                        climate_data_file,
+                                        rfmip,
+                                        params,
+                                        zosdir,
+                                        global_sl_out_file=global_sl_out_file,
+                                        init_local_out_file=init_local_out_file,
+                                        init_local_quantile_file=init_local_quantile_file
+                                        )
+    else:
+         print('Local output files not provided, skipping post-processing and only running global projections.')
 
 if __name__ == '__main__':
 

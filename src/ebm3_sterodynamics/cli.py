@@ -71,14 +71,14 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
 @click.option(
     "--rfmip",
     help="rfmip file",
-    default = "rfmip-radiative-forcing-annual-means-v4-0-0.csv",
+    default = "ebm3_project_data/rfmip-radiative-forcing-annual-means-v4-0-0.csv",
     show_default=True,
     type=str,
 )
 @click.option(
     "--oceandynamics-params-file",
     help = "CMIP6 params csv",
-    default= "4xCO2_cummins_ebm3_cmip6.csv",
+    default= "ebm3_project_data/4xCO2_cummins_ebm3_cmip6.csv",
     type=str,
     show_default=True
 )
@@ -89,18 +89,18 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
     type=str,
     show_default=True  
 )
-#@click.option(
-#    "--init-local-out-file",
-#    help="Path to the initial local output file",
-#    default=None,
-#    type=str,
-#)
-#@click.option(
-#   "--init-local-quantile-file",
-#    help="Path to the initial local quantile file",
-#    default=None,
-#    type=str,
-#)
+@click.option(
+    "--init-local-out-file",
+    help="Path to the initial local output file",
+    default=None,
+    type=str,
+)
+@click.option(
+   "--init-local-quantile-file",
+    help="Path to the initial local quantile file",
+    default=None,
+    type=str,
+)
 @click.option(
     "--thermal-expansion-params-file",
     help="Full path to the calibrated constrains params file",
@@ -116,7 +116,7 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
     type=str,
 )
 @click.option(
-    "--global-sl-out-file",
+    "--output-gslr-file",
     help="Path to the output file for global sea-level rise",
     default=None,
     type=str,
@@ -137,9 +137,9 @@ def main(
     coef_file,
     thermal_expansion_params_file,
     zosdir,
-    #init_local_out_file,
-    #init_local_quantile_file,
-    global_sl_out_file
+    init_local_out_file,
+    init_local_quantile_file,
+    output_gslr_file
 ):
     ebm3_thermalexpansion_project_fn(
         scenario=scenario,
@@ -153,7 +153,7 @@ def main(
         baseyear=baseyear,
         seed=seed,
         pipeline_id=pipeline_id,
-        global_sl_out_file=global_sl_out_file
+        global_sl_out_file=output_gslr_file
     )
     click.echo("Thermal expansion projections completed.")
 
@@ -172,9 +172,9 @@ def main(
         rfmip = rfmip,
         params = oceandynamics_params_file,
         zosdir = zosdir,
-        global_sl_out_file=global_sl_out_file,
-        #init_local_out_file = init_local_out_file,
-        #init_local_quantile_file = init_local_quantile_file
+        global_sl_out_file=output_gslr_file,
+        init_local_out_file = init_local_out_file,
+        init_local_quantile_file = init_local_quantile_file
     )
     click.echo("Oceandynamics projections completed.")
     
