@@ -92,14 +92,14 @@ Options:
 
 See this help documentation by passing the --help flag when running the application, for example:
 ```shell
-docker run --rm emb3-sterodynamics --help
+docker run --rm ebm3-sterodynamics --help
 ```
 
 ## Build the container locally
 You can build the container with Docker by running the following command from the repository root:
 
 ```shell
-docker build -t emb3-sterodynamics .
+docker build -t ebm3-sterodynamics .
 ```
 
 ## Results
@@ -108,4 +108,4 @@ This module writes a global SLR contribution projection NetCDF file.
 ## Support 
 Source code is available online at https://github.com/fact-sealevel/ebm3-sterodynamics. This software is open source, available under the MIT license.
 
-Please file issues in the issue tracker at https://github.com/fact-sealevel/emb3-sterodynamics/issues.
+Please file issues in the issue tracker at https://github.com/fact-sealevel/ebm3-sterodynamics/issues.

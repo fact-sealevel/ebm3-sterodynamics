@@ -156,7 +156,7 @@ def Smooth(x, w=19):
 	y = np.concatenate((start, out0, stop))
 	return(y)
 
-def emb3_thermalexpansion_postprocess(
+def ebm3_oceandynamics_postprocess(
           scenario, 
           pipeline_id, 
           nsamps, 
@@ -676,7 +676,7 @@ def ebm3_oceandynamics_project_fn(
     
     if init_local_out_file is not None and init_local_quantile_file is not None:
         print('Local output files provided, running fingerprinting.')
-        emb3_thermalexpansion_postprocess(scenario, 
+        ebm3_oceandynamics_postprocess(scenario, 
                                         pipeline_id, 
                                         nsamps, 
                                         seed, 
@@ -720,7 +720,7 @@ if __name__ == '__main__':
     # Parse the arguments
     args = parser.parse_args()
 
-    emb3_thermalexpansion_postprocess(args.scenario, 
+    ebm3_oceandynamics_postprocess(args.scenario, 
                                       args.pipeline_id, 
                                       args.nsamps, 
                                       args.seed, 
