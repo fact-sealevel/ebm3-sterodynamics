@@ -28,22 +28,25 @@ Run the application in a container based on the image published in the container
 docker run --rm \
 -v ./data/input:/mnt/data_in:ro \
 -v ./data/output_for_ebm:/mnt/data_out \
-ebm3-sterodynamics \
+ebm3-sterodynamics:package \
 --scenario 'ssp585' \
 --nsamps 1000 \
 --seed 1234 \
 --pyear-start 2020 \
---pyear-end 2100 \
+--pyear-end 2150 \
 --pyear-step 10 \
 --baseyear 2005 \
 --location-file /mnt/data_in/location.lst \
 --pipeline-id aaa \
 --climate-data-file /mnt/data_in/climate_1000.nc \
 --rfmip /mnt/data_in/ebm3_project_data/rfmip-radiative-forcing-annual-means-v4-0-0.csv \
+--oceandynamics-params-file /mnt/data_in/ebm3_project_data/4xCO2_cummins_ebm3_cmip6.csv \
 --zosdir /mnt/data_in/cmip6/zos/ \
 --coef-file /mnt/data_in/ebm3_project_data/scmpy3LM_RCMIP_CMIP6calpm_n18_expcoefs.nc \
 --thermal-expansion-params-file /mnt/data_in/ebm3_project_data/calibrated_constrained_parameters.csv \
---output-gslr-file /mnt/data_out/gslr.nc
+--output-gslr-file /mnt/data_out/gslr.nc \
+--output-lslr-file /mnt/data_out/lslr.nc \
+--output-lslr-quantile-file /mnt/data_out/lslr_quantile.nc
 ```
 
 ## Features
@@ -71,13 +74,17 @@ Options:
                                   module.
   --climate-data-file TEXT        NetCDF4/HDF5 file containing surface
                                   temperature data
-  --rfmip TEXT                    rfmip file  [default: rfmip-radiative-
-                                  forcing-annual-means-v4-0-0.csv]
+  --rfmip TEXT                    rfmip file  [default:
+                                  ebm3_project_data/rfmip-radiative-forcing-
+                                  annual-means-v4-0-0.csv]
   --oceandynamics-params-file TEXT
-                                  CMIP6 params csv  [default:
-                                  4xCO2_cummins_ebm3_cmip6.csv]
+                                  CMIP6 params csv  [default: ebm3_project_dat
+                                  a/4xCO2_cummins_ebm3_cmip6.csv]
   --zosdir TEXT                   Path to CMIP6 ZOS directory  [default:
                                   cmip6/zos/]
+  --init-local-out-file TEXT      Path to the initial local output file
+  --init-local-quantile-file TEXT
+                                  Path to the initial local quantile file
   --thermal-expansion-params-file TEXT
                                   Full path to the calibrated constrains
                                   params file  [default:
@@ -85,7 +92,7 @@ Options:
   --coef-file TEXT                Full path to expansion coefficient file
                                   [default:
                                   scmpy3LM_RCMIP_CMIP6calpm_n18_expcoefs.nc]
-  --global-sl-out-file TEXT       Path to the output file for global sea-level
+  --output-gslr-file TEXT         Path to the output file for global sea-level
                                   rise
   --help                          Show this message and exit.
 ```
