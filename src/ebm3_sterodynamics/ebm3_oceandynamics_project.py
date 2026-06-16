@@ -6,16 +6,16 @@ import os
 import pandas as pd
 import sys
 import argparse
-import energy_balance_model as ebm3
+from ebm3_sterodynamics import energy_balance_model as ebm3
 import csv
 import xarray as xr
 from sklearn import linear_model
 import re
 import time
-import netCDF4
-import h5py
-import scipy
-import pickle
+#import netCDF4
+#import h5py
+#import scipy
+#import pickle
 
 """
 Created on Fri Jun  7 11:24:19 2024
@@ -156,7 +156,25 @@ def Smooth(x, w=19):
 	y = np.concatenate((start, out0, stop))
 	return(y)
 
-def emb3_thermalexpansion_postprocess(scenario, pipeline_id, nsamps, seed, pyear_start, pyear_end, pyear_step, locationfile, baseyear, climate_data_file, rfmip, params, zosdir):
+def ebm3_oceandynamics_postprocess(
+          scenario, 
+          pipeline_id, 
+          nsamps, 
+          seed, 
+          pyear_start, 
+          pyear_end, 
+          pyear_step, 
+          locationfile, 
+          baseyear, 
+          climate_data_file, 
+          rfmip, 
+          params, 
+          zosdir,
+          global_sl_out_file,
+          local_rsl_out_file,
+          local_rsl_quantile_out_file
+          ):
+    
     if pyear_end < 2151:
         ryear_end = 2100
     elif pyear_end > 2300:
@@ -175,7 +193,8 @@ def emb3_thermalexpansion_postprocess(scenario, pipeline_id, nsamps, seed, pyear
     otemp = cf['deep_ocean_temperature'].sel(years=projyears) - cf['deep_ocean_temperature'].sel(years=np.arange(baseyear-9,baseyear+10)).mean(dim='years')
 
     # INPUT temperature file from ebm3 global
-    gte_file = f'{pipeline_id}_globalsl.nc'
+    #gte_file = f'{pipeline_id}_globalsl.nc'
+    gte_file = global_sl_out_file
 
     # INPUT get models and parameters
     paramdir = params
@@ -563,7 +582,7 @@ def emb3_thermalexpansion_postprocess(scenario, pipeline_id, nsamps, seed, pyear
 
     for sample in samples:
         slope = slopes_resampled[sample]
-        print(sample)
+        #print(sample)
         
         # prepare slopes
         slope_s = slope[0,:,:].flatten()
@@ -603,7 +622,7 @@ def emb3_thermalexpansion_postprocess(scenario, pipeline_id, nsamps, seed, pyear
     weights.name = "weights"
 
     dsl_xr_weighted = dsl_xr.weighted(weights)
-    dsl_xr_weighted
+    #dsl_xr_weighted
     weighted_mean = dsl_xr_weighted.mean(("locations"))
 
 
@@ -627,11 +646,56 @@ def emb3_thermalexpansion_postprocess(scenario, pipeline_id, nsamps, seed, pyear
                             "lat": (("locations"), site_lats),
                             "lon": (("locations"), site_lons)},
                             coords={"years": projyears, "locations": site_ids, "samples": np.arange(nsamps)}, attrs=ncvar_attributes)
-        # Write these samples to a temporary netcdf file
-    local_out.to_netcdf("{0}_localsl.nc".format(pipeline_id), encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
+    # Write these samples to a temporary netcdf file
+    #local_out.to_netcdf("{0}_localsl.nc".format(pipeline_id), encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
+    local_out.to_netcdf(local_rsl_out_file,
+                        encoding = {"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
     local_outq = local_out.quantile([0.01,0.05,0.17,0.50,0.83,0.95,0.99], dim='samples')
-    local_outq.to_netcdf("{0}_quantiles.nc".format(pipeline_id), encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
+    local_outq.to_netcdf(
+         local_rsl_quantile_out_file, 
+         encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
     
+def ebm3_oceandynamics_project_fn(
+          scenario,
+          nsamps,
+          seed,
+          pyear_start,
+          pyear_end,
+          pyear_step,
+          baseyear,
+          location_file,
+          pipeline_id,
+          climate_data_file,
+          rfmip,
+          params,
+          zosdir,
+          global_sl_out_file,
+          lslr_out_file,
+          lslr_quantile_out_file,
+          ):
+    
+    if lslr_out_file is not None and lslr_quantile_out_file is not None:
+        print('Local output files provided, running fingerprinting.')
+        ebm3_oceandynamics_postprocess(scenario, 
+                                        pipeline_id, 
+                                        nsamps, 
+                                        seed, 
+                                        pyear_start, 
+                                        pyear_end, 
+                                        pyear_step, 
+                                        location_file, 
+                                        baseyear, 
+                                        climate_data_file,
+                                        rfmip,
+                                        params,
+                                        zosdir,
+                                        global_sl_out_file=global_sl_out_file,
+                                        local_rsl_out_file=lslr_out_file,
+                                        local_rsl_quantile_out_file=lslr_quantile_out_file
+                                        )
+    else:
+         print('Local output files not provided, skipping post-processing and only running global projections.')
+
 if __name__ == '__main__':
 
     # Initialize the command-line argument parser
@@ -656,7 +720,7 @@ if __name__ == '__main__':
     # Parse the arguments
     args = parser.parse_args()
 
-    emb3_thermalexpansion_postprocess(args.scenario, 
+    ebm3_oceandynamics_postprocess(args.scenario, 
                                       args.pipeline_id, 
                                       args.nsamps, 
                                       args.seed, 
