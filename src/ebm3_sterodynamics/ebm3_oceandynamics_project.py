@@ -171,8 +171,8 @@ def ebm3_oceandynamics_postprocess(
           params, 
           zosdir,
           global_sl_out_file,
-          init_local_out_file,
-          init_local_quantile_file
+          local_rsl_out_file,
+          local_rsl_quantile_out_file
           ):
     
     if pyear_end < 2151:
@@ -648,11 +648,11 @@ def ebm3_oceandynamics_postprocess(
                             coords={"years": projyears, "locations": site_ids, "samples": np.arange(nsamps)}, attrs=ncvar_attributes)
     # Write these samples to a temporary netcdf file
     #local_out.to_netcdf("{0}_localsl.nc".format(pipeline_id), encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
-    local_out.to_netcdf(init_local_out_file,
+    local_out.to_netcdf(local_rsl_out_file,
                         encoding = {"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
     local_outq = local_out.quantile([0.01,0.05,0.17,0.50,0.83,0.95,0.99], dim='samples')
     local_outq.to_netcdf(
-         init_local_quantile_file, 
+         local_rsl_quantile_out_file, 
          encoding={"sea_level_change": {"dtype": "f4", "zlib": True, "complevel":4, "_FillValue": nc_missing_value}})
     
 def ebm3_oceandynamics_project_fn(
@@ -670,11 +670,11 @@ def ebm3_oceandynamics_project_fn(
           params,
           zosdir,
           global_sl_out_file,
-          init_local_out_file,
-          init_local_quantile_file,
+          lslr_out_file,
+          lslr_quantile_out_file,
           ):
     
-    if init_local_out_file is not None and init_local_quantile_file is not None:
+    if lslr_out_file is not None and lslr_quantile_out_file is not None:
         print('Local output files provided, running fingerprinting.')
         ebm3_oceandynamics_postprocess(scenario, 
                                         pipeline_id, 
@@ -690,8 +690,8 @@ def ebm3_oceandynamics_project_fn(
                                         params,
                                         zosdir,
                                         global_sl_out_file=global_sl_out_file,
-                                        init_local_out_file=init_local_out_file,
-                                        init_local_quantile_file=init_local_quantile_file
+                                        local_rsl_out_file=lslr_out_file,
+                                        local_rsl_quantile_out_file=lslr_quantile_out_file
                                         )
     else:
          print('Local output files not provided, skipping post-processing and only running global projections.')

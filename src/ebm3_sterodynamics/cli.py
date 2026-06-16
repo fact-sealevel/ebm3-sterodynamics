@@ -90,13 +90,13 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
     show_default=True  
 )
 @click.option(
-    "--init-local-out-file",
+    "--output-lslr-file",
     help="Path to the initial local output file",
     default=None,
     type=str,
 )
 @click.option(
-   "--init-local-quantile-file",
+   "--output-lslr-quantile-file",
     help="Path to the initial local quantile file",
     default=None,
     type=str,
@@ -137,8 +137,8 @@ def main(
     coef_file,
     thermal_expansion_params_file,
     zosdir,
-    init_local_out_file,
-    init_local_quantile_file,
+    output_lslr_file,
+    output_lslr_quantile_file,
     output_gslr_file
 ):
     ebm3_thermalexpansion_project_fn(
@@ -173,8 +173,8 @@ def main(
         params = oceandynamics_params_file,
         zosdir = zosdir,
         global_sl_out_file=output_gslr_file,
-        init_local_out_file = init_local_out_file,
-        init_local_quantile_file = init_local_quantile_file
+        lslr_out_file=output_lslr_file,
+        lslr_quantile_out_file=output_lslr_quantile_file
     )
     click.echo("Oceandynamics projections completed.")
     

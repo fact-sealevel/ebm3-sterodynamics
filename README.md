@@ -23,7 +23,7 @@ mkdir -p ./data/output
 >[!IMPORTANT]
 > This module **requires** a `climate.nc` file that is the output of the FACTS2 [fair2-climate](https://github.com/fact-sealevel/fair2-climate) module, which is created outside of this prototype. See the example in this repository's README to run the module and create the output file. Before running this example, manually move the file into `./data/input` and ensure that the filename matches that passed to `climate-file`. The number of samples (`--nsamps`) drawn in the FAIR run must pass the number of samples specified in this run. 
 
-Run the application in a container based on the image published in the container registry:
+Run the application in a container based on the image published in the container registry. Note that the number of samples in the FAIR `climate.nc` file passed must match the `--nsamps` argument.
 ```shell
 docker run --rm \
 -v ./data/input:/mnt/data_in:ro \
@@ -38,8 +38,8 @@ ebm3-sterodynamics \
 --baseyear 2005 \
 --location-file /mnt/data_in/location.lst \
 --pipeline-id aaa \
---climate-data-file /mnt/data_in/climate.nc \
---rfimp /mnt/data_in/ebm3_project_data/rfmip-radiative-forcing-annual-means-v4-0-0.csv \
+--climate-data-file /mnt/data_in/climate_1000.nc \
+--rfmip /mnt/data_in/ebm3_project_data/rfmip-radiative-forcing-annual-means-v4-0-0.csv \
 --zosdir /mnt/data_in/cmip6/zos/ \
 --coef-file /mnt/data_in/ebm3_project_data/scmpy3LM_RCMIP_CMIP6calpm_n18_expcoefs.nc \
 --thermal-expansion-params-file /mnt/data_in/ebm3_project_data/calibrated_constrained_parameters.csv \
