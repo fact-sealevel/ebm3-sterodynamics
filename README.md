@@ -110,7 +110,7 @@ docker build -t ebm3-sterodynamics .
 ```
 
 ## Results
-This module writes a global SLR contribution projection NetCDF file.
+This module writes a global SLR contribution projection NetCDF file. Optionally, it also writes projections of contribution to local relative sea level.
 
 ## Support 
 Source code is available online at https://github.com/fact-sealevel/ebm3-sterodynamics. This software is open source, available under the MIT license.
