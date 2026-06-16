@@ -3,25 +3,32 @@ from ebm3_sterodynamics.ebm3_oceandynamics_project import (
     ebm3_oceandynamics_project_fn,
 )
 from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
-    ebm3_thermalexpansion_project_fn
+    ebm3_thermalexpansion_project_fn,
 )
 
+
 @click.command()
-@click.option("--scenario", 
-              help="SSP scenario (ie. 'ssp585')",
-              default='ssp585',
-              show_default=True,
-              type=str)
-@click.option("--nsamps",
-              help = "Number of samples to generate",
-              default=20000,
-              show_default=True,
-              type=int)
-@click.option("--seed",
-              help="Seed value for random number generator",
-              type=int,
-              default=1234,
-              show_default=True)
+@click.option(
+    "--scenario",
+    help="SSP scenario (ie. 'ssp585')",
+    default="ssp585",
+    show_default=True,
+    type=str,
+)
+@click.option(
+    "--nsamps",
+    help="Number of samples to generate",
+    default=20000,
+    show_default=True,
+    type=int,
+)
+@click.option(
+    "--seed",
+    help="Seed value for random number generator",
+    type=int,
+    default=1234,
+    show_default=True,
+)
 @click.option(
     "--pyear-start",
     envvar="BAMBER19_ICESHEETS_PYEAR_START",
@@ -71,23 +78,23 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
 @click.option(
     "--rfmip",
     help="rfmip file",
-    default = "ebm3_project_data/rfmip-radiative-forcing-annual-means-v4-0-0.csv",
+    default="ebm3_project_data/rfmip-radiative-forcing-annual-means-v4-0-0.csv",
     show_default=True,
     type=str,
 )
 @click.option(
     "--oceandynamics-params-file",
-    help = "CMIP6 params csv",
-    default= "ebm3_project_data/4xCO2_cummins_ebm3_cmip6.csv",
+    help="CMIP6 params csv",
+    default="ebm3_project_data/4xCO2_cummins_ebm3_cmip6.csv",
     type=str,
-    show_default=True
+    show_default=True,
 )
 @click.option(
     "--zosdir",
     help="Path to CMIP6 ZOS directory",
     default="cmip6/zos/",
     type=str,
-    show_default=True  
+    show_default=True,
 )
 @click.option(
     "--output-lslr-file",
@@ -96,7 +103,7 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
     type=str,
 )
 @click.option(
-   "--output-lslr-quantile-file",
+    "--output-lslr-quantile-file",
     help="Path to the initial local quantile file",
     default=None,
     type=str,
@@ -104,14 +111,14 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
 @click.option(
     "--thermal-expansion-params-file",
     help="Full path to the calibrated constrains params file",
-    default = "calibrated_constraints_paramters.csv",
+    default="calibrated_constraints_paramters.csv",
     show_default=True,
     type=str,
 )
 @click.option(
     "--coef-file",
-    help= "Full path to expansion coefficient file",
-    default = "scmpy3LM_RCMIP_CMIP6calpm_n18_expcoefs.nc",
+    help="Full path to expansion coefficient file",
+    default="scmpy3LM_RCMIP_CMIP6calpm_n18_expcoefs.nc",
     show_default=True,
     type=str,
 )
@@ -139,43 +146,41 @@ def main(
     zosdir,
     output_lslr_file,
     output_lslr_quantile_file,
-    output_gslr_file
+    output_gslr_file,
 ):
     ebm3_thermalexpansion_project_fn(
         scenario=scenario,
         climate_data_file=climate_data_file,
         params_file=thermal_expansion_params_file,
         coef_file=coef_file,
-        nsamps = nsamps,
-        pyear_start = pyear_start,
-        pyear_end = pyear_end,
-        pyear_step = pyear_step,
+        nsamps=nsamps,
+        pyear_start=pyear_start,
+        pyear_end=pyear_end,
+        pyear_step=pyear_step,
         baseyear=baseyear,
         seed=seed,
         pipeline_id=pipeline_id,
-        global_sl_out_file=output_gslr_file
+        global_sl_out_file=output_gslr_file,
     )
     click.echo("Thermal expansion projections completed.")
 
-    #writes initial local output and local quantile output files
+    # writes initial local output and local quantile output files
     ebm3_oceandynamics_project_fn(
-        scenario = scenario,
-        nsamps = nsamps,
-        seed = seed,
-        pyear_start = pyear_start,
-        pyear_end = pyear_end,
-        pyear_step = pyear_step,
-        baseyear = baseyear,
-        location_file = location_file,
-        pipeline_id = pipeline_id,
-        climate_data_file = climate_data_file,
-        rfmip = rfmip,
-        params = oceandynamics_params_file,
-        zosdir = zosdir,
+        scenario=scenario,
+        nsamps=nsamps,
+        seed=seed,
+        pyear_start=pyear_start,
+        pyear_end=pyear_end,
+        pyear_step=pyear_step,
+        baseyear=baseyear,
+        location_file=location_file,
+        pipeline_id=pipeline_id,
+        climate_data_file=climate_data_file,
+        rfmip=rfmip,
+        params=oceandynamics_params_file,
+        zosdir=zosdir,
         global_sl_out_file=output_gslr_file,
         lslr_out_file=output_lslr_file,
-        lslr_quantile_out_file=output_lslr_quantile_file
+        lslr_quantile_out_file=output_lslr_quantile_file,
     )
     click.echo("Oceandynamics projections completed.")
-    
-
