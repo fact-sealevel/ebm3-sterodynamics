@@ -123,8 +123,6 @@ def ebm3_thermalexpansion_project(
             "years": ("years", targyears.astype("i4")),
             "samples": ("samples", np.arange(nsamps, dtype="i8")),
             "locations": ("locations", np.array([-1], dtype="i8")),
-            "lat": ("locations", np.array([np.inf], dtype="f4")),
-            "lon": ("locations", np.array([np.inf], dtype="f4")),
         },
         attrs={
             "description": "Global SLR contribution from Thermal Expansion according to Three-Layer Model workflow",

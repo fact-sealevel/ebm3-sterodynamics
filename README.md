@@ -27,8 +27,8 @@ Run the application in a container based on the image published in the container
 ```shell
 docker run --rm \
 -v ./data/input:/mnt/data_in:ro \
--v ./data/output_for_ebm:/mnt/data_out \
-ebm3-sterodynamics:package \
+-v ./data/output:/mnt/data_out \
+ghcr.io/fact-sealevel/ebm3-sterodynamics:latest \
 --scenario 'ssp585' \
 --nsamps 1000 \
 --seed 1234 \
