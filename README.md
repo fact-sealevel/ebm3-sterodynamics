@@ -54,46 +54,49 @@ ghcr.io/fact-sealevel/ebm3-sterodynamics:latest \
 Usage: ebm3-sterodynamics [OPTIONS]
 
 Options:
-  --scenario TEXT                 SSP scenario (ie. 'ssp585')  [default:
-                                  ssp585]
-  --nsamps INTEGER                Number of samples to generate  [default:
-                                  20000]
-  --seed INTEGER                  Seed value for random number generator
-                                  [default: 1234]
-  --pyear-start INTEGER RANGE     Projection year start  [default: 2020;
-                                  x>=2020]
+  --scenario TEXT                 SSP scenario (ie. 'ssp585')
+                                  [default: ssp585]
+  --nsamps INTEGER                Number of samples to generate
+                                  [default: 20000]
+  --seed INTEGER                  Seed value for random number
+                                  generator  [default: 1234]
+  --pyear-start INTEGER RANGE     Projection year start  [default:
+                                  2020; x>=2000]
   --pyear-end INTEGER RANGE       Projection year end  [default: 2100;
                                   x<=2300]
-  --pyear-step INTEGER RANGE      Projection year step  [default: 10; x>=1]
-  --baseyear INTEGER              Year to which projections are referenced
-                                  [default: 2000]
-  --location-file TEXT            Path to file that contains name, id, lat,
-                                  and lon of points for localization
-                                  [required]
-  --pipeline-id TEXT              Unique identifier for this instance of the
-                                  module.
+  --pyear-step INTEGER RANGE      Projection year step  [default: 10;
+                                  x>=1]
+  --baseyear INTEGER              Year to which projections are
+                                  referenced  [default: 2000]
+  --location-file TEXT            Path to file that contains name, id,
+                                  lat, and lon of points for
+                                  localization  [required]
+  --pipeline-id TEXT              Unique identifier for this instance
+                                  of the module.
   --climate-data-file TEXT        NetCDF4/HDF5 file containing surface
                                   temperature data
   --rfmip TEXT                    rfmip file  [default:
-                                  ebm3_project_data/rfmip-radiative-forcing-
-                                  annual-means-v4-0-0.csv]
+                                  ebm3_project_data/rfmip-radiative-
+                                  forcing-annual-means-v4-0-0.csv]
   --oceandynamics-params-file TEXT
-                                  CMIP6 params csv  [default: ebm3_project_dat
-                                  a/4xCO2_cummins_ebm3_cmip6.csv]
-  --zosdir TEXT                   Path to CMIP6 ZOS directory  [default:
-                                  cmip6/zos/]
-  --init-local-out-file TEXT      Path to the initial local output file
-  --init-local-quantile-file TEXT
-                                  Path to the initial local quantile file
+                                  CMIP6 params csv  [default: ebm3_proj
+                                  ect_data/4xCO2_cummins_ebm3_cmip6.csv
+                                  ]
+  --zosdir TEXT                   Path to CMIP6 ZOS directory
+                                  [default: cmip6/zos/]
+  --output-lslr-file TEXT         Path to the initial local output file
+  --output-lslr-quantile-file TEXT
+                                  Path to the initial local quantile
+                                  file
   --thermal-expansion-params-file TEXT
-                                  Full path to the calibrated constrains
-                                  params file  [default:
+                                  Full path to the calibrated
+                                  constrains params file  [default:
                                   calibrated_constraints_paramters.csv]
-  --coef-file TEXT                Full path to expansion coefficient file
-                                  [default:
-                                  scmpy3LM_RCMIP_CMIP6calpm_n18_expcoefs.nc]
-  --output-gslr-file TEXT         Path to the output file for global sea-level
-                                  rise
+  --coef-file TEXT                Full path to expansion coefficient
+                                  file  [default: scmpy3LM_RCMIP_CMIP6c
+                                  alpm_n18_expcoefs.nc]
+  --output-gslr-file TEXT         Path to the output file for global
+                                  sea-level rise
   --help                          Show this message and exit.
 ```
 
