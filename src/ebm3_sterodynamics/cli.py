@@ -34,7 +34,7 @@ from ebm3_sterodynamics.ebm3_thermalexpansion_project import (
     envvar="BAMBER19_ICESHEETS_PYEAR_START",
     help="Projection year start",
     default=2020,
-    type=click.IntRange(min=2020),
+    type=click.IntRange(min=2000),
     show_default=True,
 )
 @click.option(
